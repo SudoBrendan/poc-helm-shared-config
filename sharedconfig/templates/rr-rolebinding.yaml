@@ -1,0 +1,20 @@
+{{- if .Values.rolloutrestart.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "sharedconfig.rolloutrestart.serviceAccountName" . }}
+  labels:
+    {{- include "sharedconfig.labels" . | nindent 4 }}
+  {{- with .Values.rolloutrestart.rolebinding.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "sharedconfig.rolloutrestart.serviceAccountName" . }}
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: {{ include "sharedconfig.rolloutrestart.serviceAccountName" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

@@ -1,0 +1,24 @@
+{{- if .Values.rolloutrestart.enabled -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "sharedconfig.fullname" . }}-rollout-restart
+  labels:
+    {{- include "sharedconfig.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade,post-rollback
+spec:
+  containers:
+    - name: rollout-restart
+      image: "{{ .Values.rolloutrestart.image.repository }}:{{ .Values.rolloutrestart.image.tag }}"
+      env:
+        - name: CONFIGMAP_NAME
+          value: {{ include "sharedconfig.fullname" . }}
+        - name: LABEL_KEY
+          value: {{ default .Chart.Name .Values.rolloutrestart.config.labelkey }}
+        - name: LABEL_VALUE
+          value: {{ default (include "sharedconfig.fullname" .) .Values.rolloutrestart.config.labelvalue }}
+      imagePullPolicy: {{ .Values.rolloutrestart.image.pullPolicy }}
+  restartPolicy: Never
+  serviceAccountName: {{ include "sharedconfig.rolloutrestart.serviceAccountName" . }}
+{{- end }}

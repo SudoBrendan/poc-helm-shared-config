@@ -1,6 +1,0 @@
-dependencies:
-- name: sharedconfig
-  repository: file://../sharedconfig
-  version: 0.1.0
-digest: sha256:a7f58e30d56ca71bbffd580c8bfa729957695e8e157c32d43d4558e4f2665ccd
-generated: "2021-10-29T12:54:39.088232-06:00"

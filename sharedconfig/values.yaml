@@ -1,3 +1,16 @@
 config:
   shared-foo: fuzz
   shared-biz: bazz
+
+rolloutrestart:
+  enabled: true
+  image:
+    repository: quay.io/bbergen/rollout-restart
+    tag: 0.0.7
+  config: {}
+    # labelkey: foo
+    # labelvalue: bar
+  serviceAccount:
+    name: rollout-restart
+  rolebinding: {}
+  role: {}

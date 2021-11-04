@@ -1,0 +1,22 @@
+{{- if .Values.rolloutrestart.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "sharedconfig.rolloutrestart.serviceAccountName" . }}
+  labels:
+    {{- include "sharedconfig.labels" . | nindent 4 }}
+  {{- with .Values.rolloutrestart.role.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets", "daemonsets"]
+  verbs: ["get", "list", "patch", "update"]
+- apiGroups: ["apps.openshift.io"]
+  resources: ["deploymentconfigs"]
+  verbs: ["get", "list", "patch", "update"]
+{{- end }}
